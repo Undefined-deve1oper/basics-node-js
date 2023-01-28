@@ -1,10 +1,34 @@
-const person = {
-    name: "Kirill",
-    age: 14
-};
+const yargs = require("yargs");
+const pkg = require("./package.json");
 
-function getName(p) {
-    return p.name;
-}
+yargs.version(pkg.version);
 
-console.log(getName(person));
+yargs.command({
+    command: "add",
+    describe: "Add new note to list",
+    builder: {
+        title: {
+            type: "string",
+            describe: "Note title"
+        }
+    },
+    handler({ title }) {
+        console.log("Add command: ", title);
+    }
+});
+
+yargs.command({
+    command: "list",
+    describe: "Print all notes",
+    builder: {
+        title: {
+            type: "string",
+            describe: "Note title"
+        }
+    },
+    handler({ title }) {
+        console.log("Add command: ", title);
+    }
+});
+
+yargs.parse();

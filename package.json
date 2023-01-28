@@ -1,0 +1,27 @@
+{
+    "name": "note-app",
+    "version": "1.0.0",
+    "description": "This is simple node JS Application",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Undefined-deve1oper/basics-node-js.git"
+    },
+    "keywords": [
+        "node",
+        "javascript"
+    ],
+    "author": "Kirill Kononov <kononovkirill@gmail.com>",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Undefined-deve1oper/basics-node-js/issues"
+    },
+    "homepage": "https://github.com/Undefined-deve1oper/basics-node-js#readme",
+    "dependencies": {
+        "@types/yargs": "^17.0.20",
+        "yargs": "^17.6.2"
+    }
+}
