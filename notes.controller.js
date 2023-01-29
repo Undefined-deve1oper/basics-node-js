@@ -4,6 +4,10 @@ const chalk = require("chalk");
 
 const notesPath = path.join(__dirname, "db.json");
 
+async function saveNotes(notes) {
+    await fs.writeFile(notesPath, JSON.stringify(notes));
+}
+
 async function addNote(title) {
     const notes = await getNotes();
 
@@ -15,7 +19,7 @@ async function addNote(title) {
     notes.push(note);
 
     console.log(chalk.bgYellow("The note has been added"));
-    await fs.writeFile(notesPath, JSON.stringify(notes));
+    await saveNotes(notes);
 }
 
 async function removeNote(id) {
@@ -23,8 +27,16 @@ async function removeNote(id) {
 
     const updatedNotes = notes.filter((note) => note.id !== id);
 
+    await saveNotes(updatedNotes);
     console.log(chalk.bgYellow("The note has been deleted"));
-    await fs.writeFile(notesPath, JSON.stringify(updatedNotes));
+}
+async function updateNote(id, title) {
+    const notes = await getNotes();
+    const elementIndex = notes.findIndex((note) => note.id === id);
+    notes[elementIndex].title = title;
+
+    await saveNotes(notes);
+    console.log(chalk.bgYellow("The note has been deleted"));
 }
 
 async function getNotes() {
@@ -43,6 +55,7 @@ async function printNotes() {
 
 module.exports = {
     addNote,
-    printNotes,
-    removeNote
+    getNotes,
+    removeNote,
+    updateNote
 };
