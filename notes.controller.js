@@ -37,7 +37,7 @@ async function printNotes() {
     console.log(chalk.bgGray("Here is the list of notes"));
 
     notes.forEach((note) => {
-        console.log(chalk.yellow(note.title));
+        console.log(chalk.yellow(note.id) + ": " + chalk.red(note.title));
     });
 }
 
