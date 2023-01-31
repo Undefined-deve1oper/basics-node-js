@@ -5,12 +5,12 @@ document.addEventListener("click", function ({ target }) {
         remove(id).then(() => {
             target.closest("li").remove();
         });
-    } else if (target.dataset.type === "update") {
+    } else if (target.dataset.type === "edit") {
         const updatedTitle = prompt("Введите новое значение")?.trim();
         const id = target.dataset.id;
 
         if (updatedTitle) {
-            update(id, updatedTitle).then(() => {
+            edit(id, updatedTitle).then(() => {
                 target.closest("li").childNodes[0].textContent = updatedTitle;
             });
         }
@@ -21,7 +21,7 @@ async function remove(id) {
     await fetch(`/${id}`, { method: "DELETE" });
 }
 
-async function update(id, updatedTitle) {
+async function edit(id, updatedTitle) {
     return await fetch(`/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
