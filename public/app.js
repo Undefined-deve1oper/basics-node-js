@@ -1,19 +1,75 @@
-document.addEventListener("click", function ({ target }) {
-    if (target.dataset.type === "remove") {
-        const id = target.dataset.id;
+let isEdit = false;
+
+function toggleEditState() {
+    return (isEdit = !isEdit);
+}
+function getNoteId(event) {
+    return event.target.closest("li").dataset.id;
+}
+
+function renderNoteItem(event) {
+    const noteParent = event.target.closest("li");
+    const title =
+        event.target.closest("div").previousElementSibling.textContent ||
+        event.target.closest("div").previousElementSibling.value;
+
+    if (isEdit) {
+        noteParent.innerHTML = `
+		<input type="text" class="form-control w-25" autofocus value="${title}" />
+		<div class="d-flex gap-3">
+			<button class="btn btn-success" data-type="save">Сохранить</button>
+			<button class="btn btn-danger" data-type="cancel">Отменить</button>
+		</div>
+		`;
+    } else {
+        noteParent.innerHTML = `
+		<span>${title}</span>
+
+		<div class="d-flex gap-3">
+			<button
+				class="btn btn-primary"
+				data-type="edit"
+				data-id="<%= notes[i].id %>"
+			>
+				Обновить
+			</button>
+			<button
+				class="btn btn-danger"
+				data-type="remove"
+				data-id="<%= notes[i].id %>"
+			>
+				&times;
+			</button>
+		</div>
+		`;
+    }
+}
+
+document.addEventListener("click", function (event) {
+    if (event.target.dataset.type === "edit") {
+        toggleEditState();
+        renderNoteItem(event);
+    }
+    if (event.target.dataset.type === "save") {
+        const id = getNoteId(event);
+        const updatedTitle =
+            event.target.closest("div").previousElementSibling.value;
+
+        edit(id, updatedTitle).then(() => {
+            toggleEditState();
+            renderNoteItem(event);
+        });
+    }
+    if (event.target.dataset.type === "cancel") {
+        toggleEditState();
+        renderNoteItem(event);
+    }
+    if (event.target.dataset.type === "remove") {
+        const id = getNoteId(event);
 
         remove(id).then(() => {
-            target.closest("li").remove();
+            event.target.closest("li").remove();
         });
-    } else if (target.dataset.type === "edit") {
-        const updatedTitle = prompt("Введите новое значение")?.trim();
-        const id = target.dataset.id;
-
-        if (updatedTitle) {
-            edit(id, updatedTitle).then(() => {
-                target.closest("li").childNodes[0].textContent = updatedTitle;
-            });
-        }
     }
 });
 

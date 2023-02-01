@@ -36,7 +36,7 @@ async function updateNote(id, title) {
     notes[elementIndex].title = title;
 
     await saveNotes(notes);
-    console.log(chalk.bgYellow("The note has been deleted"));
+    console.log(chalk.bgBlue("The note has been updated"));
 }
 
 async function getNotes() {

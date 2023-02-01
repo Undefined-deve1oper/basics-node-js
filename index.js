@@ -26,6 +26,7 @@ app.get("/", async (req, res) => {
     res.render("index", {
         title: "Express app",
         notes: await getNotes(),
+        edited: false,
         created: false
     });
 });
@@ -35,6 +36,7 @@ app.post("/", async (req, res) => {
     res.render("index", {
         title: "Express app",
         notes: await getNotes(),
+        edited: false,
         created: true
     });
 });
@@ -44,6 +46,7 @@ app.delete("/:id", async (req, res) => {
     res.render("index", {
         title: "Express app",
         notes: await getNotes(),
+        edited: false,
         created: false
     });
 });
@@ -53,6 +56,7 @@ app.put("/:id", async (req, res) => {
     res.render("index", {
         title: "Express app",
         notes: await getNotes(),
+        edited: true,
         created: false
     });
 });
