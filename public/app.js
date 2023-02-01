@@ -3,25 +3,25 @@ let isEdit = false;
 function toggleEditState() {
     return (isEdit = !isEdit);
 }
-function parentLi(event) {
-    return event.target.closest("li");
+function getNoteId(event) {
+    return event.target.closest("li").dataset.id;
 }
 
 function renderNoteItem(event) {
-    const noteParent = parentLi(event);
+    const noteParent = event.target.closest("li");
     const title =
-        event.target.closest("div").previousElementSibling.textContent;
+        event.target.closest("div").previousElementSibling.textContent ||
+        event.target.closest("div").previousElementSibling.value;
 
     if (isEdit) {
         noteParent.innerHTML = `
-		<input type="text" class="form-control" id="floatingInput" value="${title}" />
+		<input type="text" class="form-control w-25" autofocus value="${title}" />
 		<div class="d-flex gap-3">
 			<button class="btn btn-success" data-type="save">Сохранить</button>
 			<button class="btn btn-danger" data-type="cancel">Отменить</button>
 		</div>
 		`;
     } else {
-        const title = event.target.closest("div").previousElementSibling.value;
         noteParent.innerHTML = `
 		<span>${title}</span>
 
@@ -31,7 +31,7 @@ function renderNoteItem(event) {
 				data-type="edit"
 				data-id="<%= notes[i].id %>"
 			>
-				Редактировать
+				Обновить
 			</button>
 			<button
 				class="btn btn-danger"
@@ -51,24 +51,24 @@ document.addEventListener("click", function (event) {
         renderNoteItem(event);
     }
     if (event.target.dataset.type === "save") {
-        const id = event.target.dataset.id;
+        const id = getNoteId(event);
         const updatedTitle =
             event.target.closest("div").previousElementSibling.value;
 
-        toggleEditState();
-        renderNoteItem(event);
-
-        edit(id, updatedTitle);
+        edit(id, updatedTitle).then(() => {
+            toggleEditState();
+            renderNoteItem(event);
+        });
     }
     if (event.target.dataset.type === "cancel") {
         toggleEditState();
         renderNoteItem(event);
     }
     if (event.target.dataset.type === "remove") {
-        const id = event.target.dataset.id;
+        const id = getNoteId(event);
 
         remove(id).then(() => {
-            parentLi(event).remove();
+            event.target.closest("li").remove();
         });
     }
 });
